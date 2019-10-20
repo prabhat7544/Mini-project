@@ -27,7 +27,7 @@ These 3 algorithms could be added to the project by changing a single line.
 3. [Numpy](https://www.numpy.org/)
 
 # How to run?
-To run the program, in terminal type `python facemaster.py`
+To run the program, in terminal type `python face_rec.py`
 
 The photos of each individual should be stored in a folder s[i] (s1, s2 etc) inside the training-data folder.
 Test images are stored in test-data folder.
