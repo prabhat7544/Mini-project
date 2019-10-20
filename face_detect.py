@@ -2,10 +2,9 @@ import cv2
 import sys
 
 def face_detect(imagePath):
-	# HaarCascade file, to detect the face.
+	
 	faceCascade = cv2.CascadeClassifier("opencv-files/haarcascade_frontalface_alt.xml")
 	image = cv2.imread(imagePath)
-	#Convert image to grayscale
 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 	grays = []
 	faces = faceCascade.detectMultiScale(
