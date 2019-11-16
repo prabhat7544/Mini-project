@@ -4,26 +4,69 @@ Created on Fri Oct 18 18:16:17 2019
 
 @author: prabh
 """
-import cv2, os , sys
-import numpy as np
-import face_detect as face_detect
+import cv2, os
 
-def training_data(data_folder):
-    dirs = os.listdir(data_folder)
-    faces = []
-    labels = []
-    for dir_name in dirs:
-        if not dir_name.startswith("s"):
-            continue;
-        label = int(dir_name.replace("s", ""))
-        subject_dir = data_folder + "/" + dir_name
-        subject_images_names = os.listdir(subject_dir)
-        for image_name in subject_images_names:
-            if image_name.startswith("."):
-                continue;
-            image_path = subject_dir + "/" + image_name
-            face, rect, length = face_detect.face_detect(image_path)
-            if face is not None:
-                faces.append(face[0])
-                labels.append(label)
-                
+# Import numpy for matrix calculation
+import numpy as np
+
+# Import Python Image Library (PIL)
+from PIL import Image
+
+def assure_path_exists(path):
+    dir = os.path.dirname(path)
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+
+# Create Local Binary Patterns Histograms for face recognization
+recognizer =cv2.face.LBPHFaceRecognizer_create()
+
+# Using prebuilt frontal face training model, for face detection
+detector = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
+
+# Create method to get the images and label data
+def getImagesAndLabels(path):
+
+    # Get all file path
+    imagePaths = [os.path.join(path,f) for f in os.listdir(path)] 
+    
+    # Initialize empty face sample
+    faceSamples=[]
+    
+    # Initialize empty id
+    ids = []
+
+    # Loop all the file path
+    for imagePath in imagePaths:
+
+        # Get the image and convert it to grayscale
+        PIL_img = Image.open(imagePath).convert('L')
+
+        # PIL image to numpy array
+        img_numpy = np.array(PIL_img,'uint8')
+
+        # Get the image id
+        id = int(os.path.split(imagePath)[-1].split(".")[1])
+
+        # Get the face from the training images
+        faces = detector.detectMultiScale(img_numpy)
+
+        # Loop for each face, append to their respective ID
+        for (x,y,w,h) in faces:
+
+            # Add the image to face samples
+            faceSamples.append(img_numpy[y:y+h,x:x+w])
+
+            # Add the ID to IDs
+            ids.append(id)
+
+    # Pass the face array and IDs array
+    return faceSamples,ids
+
+# Get the faces and IDs
+faces,ids = getImagesAndLabels('dataset')
+
+# Train the model using the faces and IDs
+recognizer.train(faces, np.array(ids))
+
+assure_path_exists('trainer/')
+recognizer.save('trainer/trainer.yml')
