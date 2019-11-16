@@ -1,31 +1,59 @@
 import cv2
-import sys
+import os
 
-def face_detect(imagePath):
-	# HaarCascade file, to detect the face.
-	faceCascade = cv2.CascadeClassifier("opencv-files/haarcascade_frontalface_alt.xml")
-	image = cv2.imread(imagePath)
-	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-	grays = []
-	faces = faceCascade.detectMultiScale(
-		gray,
-		scaleFactor=1.1,
-		minNeighbors=5,
-		minSize=(30, 30)
-	)
-	
-	# For drawing rectangles over multiple faces in the image
-	for (x, y, w, h) in faces:
-		cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
-	
-	# Show Detected faces.
-	cv2.imshow("Faces found", image)
-	cv2.waitKey(1)
-	
-	# Append the detected faces into grays list.
-	for i in range(0, len(faces)):
-		(x, y, w, h) = faces[i]
-		grays.append(gray[y:y+w, x:x+h])
-	print("--------------------------------------------")
-	print("Detecting Face -\-")
-	return grays, faces, len(faces)
+def assure_path_exists(path):
+    dir = os.path.dirname(path)
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+
+# Start capturing video
+vid_cam = cv2.VideoCapture(0)
+
+# Detect object in video stream using Haarcascade Frontal Face
+face_detector = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+
+# For each person, one face id
+face_id = input("enter your face id")
+
+# Initialize sample face image
+count = 0
+
+assure_path_exists("dataset/")
+
+# Start looping
+while(True):
+
+    # Capture video frame
+    _, image_frame = vid_cam.read()
+
+    # Convert frame to grayscale
+    gray = cv2.cvtColor(image_frame, cv2.COLOR_BGR2GRAY)
+
+    # Detect frames of different sizes, list of faces rectangles
+    faces = face_detector.detectMultiScale(gray, 1.3, 5)
+
+    # Loops for each faces
+    for (x,y,w,h) in faces:
+
+        # Crop the image frame into rectangle
+        cv2.rectangle(image_frame, (x,y), (x+w,y+h), (255,0,0), 2)
+
+        # Increment sample face image
+        count += 1
+
+        # Save the captured image into the datasets folder
+        cv2.imwrite("dataset/User." + str(face_id) + '.' + str(count) + ".jpg", gray[y:y+h,x:x+w])
+
+        # Display the video frame, with bounded rectangle on the person's face
+        cv2.imshow('frame', image_frame)
+
+    # To stop taking video, press 'q' for at least 100ms
+    if cv2.waitKey(100) & 0xFF == ord('q'):
+        break
+
+    # If image taken reach 100, stop taking video
+    elif count>100:
+        break
+
+vid_cam.release()
+cv2.destroyAllWindows()
