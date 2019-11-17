@@ -6,9 +6,9 @@ OpenCV based face recognition system that can detect and recognize multiple face
 
 
 There are 3 parts in a face recognition system.
- 1. Creating datasets (face_detect.py)
-2. Train the model (training_data.py)
-3. Face Recognition (face_rec.py)
+ 1. Creating datasets (face_datasets.py)
+2. Train the model (training.py)
+3. Face Recognition (face_recognition.py)
 
   
 # Face Detection.
@@ -26,9 +26,9 @@ Local Binary Patterns Histograms (LBPH) Face Recognizer - `cv2.face.createLBPHFa
 
 ## How to run?
 
-1. Run in the command line the face_detect.py for taking your face image as datasets.
+1. Run in the command line the face_datasets.py for taking your face image as datasets.
 5. If you have more face to be include, change the ID and run the program again
-6. Train your datasets by running training_data.py
-7. Lastly, run face_rec.py
+6. Train your datasets by running training.py
+7. Lastly, run face_recognition.py
 
 
