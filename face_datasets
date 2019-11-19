@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Oct 18 18:04:36 2019
+
+@author: prabh
+"""
+# Import OpenCV2 for image processing
 import cv2
 import os
 
@@ -13,7 +20,7 @@ vid_cam = cv2.VideoCapture(0)
 face_detector = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 # For each person, one face id
-face_id = input("enter your face id")
+face_id = input("enter your face id: ")
 
 # Initialize sample face image
 count = 0
@@ -55,5 +62,9 @@ while(True):
     elif count>100:
         break
 
+# Stop video
 vid_cam.release()
+
+# Close all started windows
 cv2.destroyAllWindows()
+print("dataset is sucessfully created")
