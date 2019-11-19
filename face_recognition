@@ -84,4 +84,3 @@ cam.release()
 
 # Close all windows
 cv2.destroyAllWindows()
-
