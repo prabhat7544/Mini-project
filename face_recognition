@@ -1,4 +1,12 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Oct 18 20:01:14 2019
+
+@author: prabh
+"""
 import cv2
+
+# Import numpy for matrices calculations
 import numpy as np
 
 import os 
@@ -51,8 +59,14 @@ while True:
         # Check the ID if exist 
         if(Id == 1):
             Id = "prabhat {0:.2f}%".format(round(100 - confidence, 2))
-        elif(Id==2):
-            Id = "shantanu {0:.2f}%".format(round(100 - confidence, 2))
+        elif(Id==5):
+            Id = "shubham {0:.2f}%".format(round(100 - confidence, 2))
+        elif(Id==4):
+            Id = "chhonkar {0:.2f}%".format(round(100 - confidence, 2))
+        elif(Id==3):
+            Id = "rupesh {0:.2f}%".format(round(100 - confidence, 2))
+        else:
+            Id = "Unidentified {0:.2f}%".format(round(100 - confidence, 2))
 
         # Put text describe who is in the picture
         cv2.rectangle(im, (x-22,y-90), (x+w+22, y-22), (0,255,0), -1)
@@ -65,6 +79,9 @@ while True:
     if cv2.waitKey(10) & 0xFF == ord('q'):
         break
 
+# Stop the camera
 cam.release()
 
+# Close all windows
 cv2.destroyAllWindows()
+
